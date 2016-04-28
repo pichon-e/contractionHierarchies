@@ -12,7 +12,7 @@ CC = g++
 
 RM = rm -f
 
-CFLAGS += -Wextra -Wall -Werror
+CFLAGS += -Wextra -Wall -Werror 
 #CFLAGS += -ansi -pedantic
 CFLAGS += -I.
 
@@ -21,7 +21,8 @@ LDFLAGS =
 NAME = server
 
 SRCS = 	main.cpp \
- 		test.cpp
+ 		test.cpp \
+ 		graph.cpp
 
 OBJS = $(SRCS:.cpp=.o)
 
