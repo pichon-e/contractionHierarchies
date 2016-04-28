@@ -21,7 +21,6 @@ LDFLAGS =
 NAME = server
 
 SRCS = 	main.cpp \
- 		test.cpp \
  		graph.cpp
 
 OBJS = $(SRCS:.cpp=.o)
