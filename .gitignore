@@ -3,3 +3,4 @@
 .git
 RemoteSystemsTempFiles
 server
+*.exe

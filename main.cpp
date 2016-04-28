@@ -1,10 +1,11 @@
 #include <cstring>
 #include <fstream>
 #include <iostream>
+#include <set>
+#include <map>
+using namespace std;
 
 #define _CRT_SECURE_NO_WARNINGS // Hello, strtok
-
-using namespace std;
 
 const char* const CSV_DELIMITER = ",";
 const int MAX_BUFF_LINE = 12000;
@@ -50,7 +51,5 @@ int main(int ac, char* av[])
 			return 1;
 		}
 	}
-
-	cout << "Hello World!" << endl;
 	return 0;
 }
