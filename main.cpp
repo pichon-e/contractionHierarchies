@@ -7,8 +7,7 @@
 #include <utility>
 
 #include "graph.hh"
-#include "route.cpp"
-#include "parser.cpp"
+#include "parser.hh"
 
 using namespace std;
 

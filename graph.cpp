@@ -20,6 +20,8 @@ void createGraph(set<pair<double, double> > store, map<pair<double, double>, int
 	}
 }
 
+//svoid roadsTo
+
 void degToRad(pair<double, double>& source, pair<double, double>& dest)
 {
 	source.first = source.first * M_PI / 180;

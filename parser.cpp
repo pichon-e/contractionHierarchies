@@ -1,12 +1,17 @@
 #include <iostream>
 #include <map>
 #include <stdlib.h>
+#include <string>
+#include <sstream>
+#include <fstream>
+
+#include "route.hh"
 
 using namespace std;
 
 void parser(char *file) {
     map<int,Route> map;
-	ifstream  data(file);
+	ifstream data(file);
 	string line;
     int j = 0;
     while(getline(data,line))
