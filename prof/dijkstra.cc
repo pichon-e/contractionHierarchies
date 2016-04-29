@@ -25,14 +25,14 @@ void Dijkstra::Run(int source) {
 		if (distance_[graph_.Head(*it) ] > arc_lengths_[*it]) {
 			distance_[graph_.Head(*it)] = arc_lengths_[*it];
 					cout << "num : " << graph_.Head(*it) << endl;
-			loulou(graph_.Head(*it), source);
+			RunRec(graph_.Head(*it), source);
 		}
 		// placement en fonction de la distance
 		//pq_.push(test);
 	}
 }
 
-void Dijkstra::loulou(int source, int prev) {
+void Dijkstra::RunRec(int source, int prev) {
 	std::vector<int> tmp = graph_.OutgoingArcs(source);
 		for (std::vector<int>::iterator it = tmp.begin(); it != tmp.end(); ++it) {
 		// DijkstraState test;
@@ -41,7 +41,7 @@ void Dijkstra::loulou(int source, int prev) {
 		cout << "num --> " << source << " - " << graph_.Head(*it) << endl;
 		if (graph_.Head(*it) != prev && graph_.Head(*it) != source &&  distance_[graph_.Head(*it) ] > arc_lengths_[*it]) {
 			distance_[graph_.Head(*it)] = arc_lengths_[*it];
-			loulou(graph_.Head(*it), source);
+			RunRec(graph_.Head(*it), source);
 		}
 		// placement en fonction de la distance
 		//pq_.push(test);
