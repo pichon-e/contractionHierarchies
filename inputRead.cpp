@@ -1,7 +1,7 @@
 #include <string>
 #include <iostream>
 #include <sstream>
-#include <algorithm>
+#include <regex>
 
 using namespace std;
 
