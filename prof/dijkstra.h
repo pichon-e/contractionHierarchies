@@ -25,6 +25,8 @@ class Dijkstra {
   const vector<int>& ParentArcs() const;    // -1 if not reached.
   vector<int> ArcPathFromSourceTo(int node) const;
 
+  void loulou(int, int);
+
  private:
   const Graph& graph_;
   const vector<double>& arc_lengths_;
