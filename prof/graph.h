@@ -37,8 +37,8 @@ class Graph {
   }
 
  private:
-  vector<vector<int>> outgoing_arcs_;
-  vector<vector<int>> incoming_arcs_;
+  vector<vector<int> > outgoing_arcs_;
+  vector<vector<int> > incoming_arcs_;
   vector<int> tail_;
   vector<int> head_;
 };

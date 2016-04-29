@@ -1,20 +1,36 @@
+##
+ ## Makefile
+ ##
+ ## Made by Astek
+ ## Login <astek@epitech.eu>
+ ##
+ ## Started on Fri Jan 28 11:52:30 2011 Astek
+ ## Last update Wed Nov 27 17:09:04 2013 felix pescarmona
+ ##
+
 CC = g++
 
 RM = rm -f
 
-CFLAGS += -Wextra -Wall -Werror 
 #CFLAGS += -ansi -pedantic
-CFLAGS += -I. -std=c++11
+CXXFLAGS = -std=c++11
 
-LDFLAGS =
+NAME = server
 
-NAME = graph_test
+SRCS = 	dijkstra.cc \
+ 		graph.cc \
+ 		dijkstra_test.cc
 
-$(NAME):
-	g++ -std=c++11 graph.cc graph_test.cc
+OBJS = $(SRCS:.cc=.o)
+
+
+all: $(NAME)
+
+$(NAME): $(OBJS)
+	$(CC) $(OBJS) -o $(NAME)
 
 clean:
-	$(RM) *.o
+	$(RM) $(OBJS)
 
 fclean: clean
 	$(RM) $(NAME)
