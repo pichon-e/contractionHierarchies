@@ -40,10 +40,14 @@ int main() {
   CHECK_EQ(graph.Head(2), 1);
   cout << "TEST PASSED: Tail() and Head()." << endl;
 
+ // vector <int> ntm = graph.IncomingArcs(5);
+ // cout << "test : " << ntm.at(0) << endl;
+
   // CHECK adjacency lists.
   CHECK_EQ(PrintList(graph.OutgoingArcs(1)), "[ 0 1 ]");
   CHECK_EQ(PrintList(graph.IncomingArcs(1)), "[ 2 5 ]");
   CHECK_EQ(PrintList(graph.OutgoingArcs(5)), "[ 3 4 ]");
+  
   CHECK_EQ(PrintList(graph.IncomingArcs(5)), "[ 3 ]");
   CHECK_EQ(PrintList(graph.IncomingArcs(9)), "[ ]");
 
