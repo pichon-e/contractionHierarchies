@@ -1,6 +1,7 @@
 #include <string>
 #include <iostream>
 #include <sstream>
+#include <algorithm>
 
 using namespace std;
 
@@ -22,10 +23,11 @@ void inputParse()
 
     line = regex_replace(inputRead(), regex("\->"), ">");
 
-    getline(line,lat1,',');
-    getline(line,lng1, '>');
-    getline(line,lat2,',');
-    getline(line,lng2);
+    stringstream lstream(line);
+    getline(lstream,lat1,',');
+    getline(lstream,lng1, '>');
+    getline(lstream,lat2,',');
+    getline(lstream,lng2);
 
     cout << lat1 << "#" << lng1 << "###" << lat2 << "#" << lng2 << "#####"<< endl;
 }
