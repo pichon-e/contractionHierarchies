@@ -1,13 +1,22 @@
+#ifndef DIJKSTRA_H
+#define DIJKSTRA_H
+
+#include <queue>
+
+using namespace std;
+
 struct DijkstraState {
   int node;
   double distance;
-  bool operator<(const DijkstraState& other) const;
+  bool operator<(const DijkstraState& other) const {
+    return (this->distance < other.distance);
+  }
 };
 
 class Dijkstra {
  public:
   // "graph" and "arc_lengths" aren't copied.
-  Dijkstra(const Graph* graph, const vector<double>* arc_lengths);
+  Dijkstra(const Graph* graph, const vector<double>* arc_lengths); 
 
   void Run(int source);
 
@@ -21,5 +30,7 @@ class Dijkstra {
   const vector<double>& arc_lengths_;
   vector<double> distance_;
   vector<int> parent_arc_;
-//  priority_queue<DijkstraState> pq_;
+  priority_queue<DijkstraState> pq_;
 };
+
+#endif

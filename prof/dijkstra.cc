@@ -3,28 +3,27 @@
 #include "dijkstra.h"
 
 
-Dijkstra::Dijkstra(const Graph* graph, const vector<double>* arc_lengths) {
-	graph_ = *graph;
-	arc_lengths_ = arc_lengths;
+Dijkstra::Dijkstra(const Graph* graph, const vector<double>* arc_lengths) : graph_(*graph), arc_lengths_(*arc_lengths)
+{
 }
 
-Dijkstra::~Dijkstra() {}
-
 void Dijkstra::Run(int source) {
-	for (int i = 0; i < arc_lengths_.size(); i++) {
-		distance_[0] = std::numeric_limits<double>::max();
+	distance_.clear();
+	for (int i = 0; i < graph_.NumNodes(); i++) {
+		distance_.push_back(std::numeric_limits<double>::infinity());
 	}
 
-	std::vector<int> tmp;
+	std::vector<int> tmp = graph_.OutgoingArcs(source);
 
 	for (std::vector<int>::iterator it = tmp.begin(); it != tmp.end(); ++it) {
 		DijkstraState test;
-		test.node = it;
-		test.distance = arc_lengths_[it];
-		if (distance_[it] > arc_lengths_[it])
-			distance_[it] = arc_lengths_[it];
+		test.node = *it;
+		test.distance = arc_lengths_[*it];
+		if (distance_[*it] > arc_lengths_[*it]) {
+			distance_[*it] = arc_lengths_[*it];
+		}
 		// placement en fonction de la distance
-		queue.push_back(test);
+		pq_.push(test);
 	}
 }
 
@@ -39,6 +38,4 @@ const vector<double>& Dijkstra::Distances() const {
 
 // }    // -1 if not reached.
 
-// vector<int> Dijkstra::ArcPathFromSourceTo(int node) const {
-
-}
+// vector<int> Dijkstra::ArcPathFromSourceTo(int node) const {}
