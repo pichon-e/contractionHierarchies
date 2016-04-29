@@ -18,6 +18,9 @@ class Graph {
  	set<int> _nodes;
  	vector<pair<int, int> > _arcs;
 
+
+  vector<int> _test;
+
 public:
   set<int> getNodes() const;
   vector<pair<int, int> > getArcs() const;

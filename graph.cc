@@ -7,6 +7,7 @@
 #include <utility>
 #include <vector>
 #include <iostream>
+#include <iterator>
 
 #include "graph.h"
 
@@ -23,7 +24,6 @@ vector<pair<int, int> > Graph::getArcs() const {
 
 int Graph::AddArc(int from, int to) {
   	_arcs.push_back(make_pair(from, to));
-    cout << "size : " << NumArcs() << endl;
   	AddNode(from);
   	AddNode(to);
     return NumArcs() - 1;
@@ -55,24 +55,24 @@ int Graph::Head(int arc) {
 
 // Returns a list of all the arc indices whose Tail is "from".
 const vector<int>& Graph::OutgoingArcs(int from) const {
-  vector<int> outgoing;
+  vector<int> *outgoing = new vector<int>();
 
-  for (vector<int, int>::iterator it = _arcs.begin(); it != _arcs.end(); ++it) {
-    if (it.first == from) {
-      outgoing.push_back(it.count());
+  for (vector<pair<int, int>>::const_iterator it = _arcs.begin(); it != _arcs.end(); ++it) {
+    if (it->first == from) {
+      outgoing->push_back(distance(_arcs.begin(), it));
     }
   }
-  return outgoing;
+  return *outgoing;
 }
 
 // Returns a list of all the arc indices whose Head is "to".
 const vector<int>& Graph::IncomingArcs(int to) const {
-vector<int> incoming;
+vector<int> *incoming = new vector<int>();
 
-  for (vector<int, int>::iterator it = _arcs.begin(); it != _arcs.end(); ++it) {
-    if (it.second == to) {
-      incoming.push_back(it.count());
+  for (vector<pair<int, int>>::const_iterator it = _arcs.begin(); it != _arcs.end(); ++it) {
+    if (it->second == to) {
+      incoming->push_back(distance(_arcs.begin(), it));
     }
   }
-  return incoming;
+  return *incoming;
 }
