@@ -9,14 +9,12 @@
 
 using namespace std;
 
-void parser(char *file) {
-    map<int,Route> map;
+void parser(char *file, map<int, Route>& mapPoint) {
 	ifstream data(file);
 	string line;
     int j = 0;
     while(getline(data,line))
     {
-        ++j;
         stringstream lineStream(line);
         string  cell;
         int     i = 0;
@@ -56,8 +54,10 @@ void parser(char *file) {
             }
             ++i;
         }
+
         // Add to the map
-        map.insert(pair<int, Route>(j,*r));
-        r->print();
-    }   
+        mapPoint.insert(pair<int, Route>(j,*r));
+        ++j;
+        //r->print();
+    }
 }
