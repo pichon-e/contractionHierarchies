@@ -26,6 +26,7 @@ void Dijkstra::Run(int source) {
 	DijkstraState prev;
 	DijkstraState newItem;
 	DijkstraState SourceItem;
+	std::vector<int> tmp;
 
 	prev.node = -1;
 
@@ -36,27 +37,31 @@ void Dijkstra::Run(int source) {
 
 	int j = 0;
 
-	while (!pq_.empty() && j++ < 5)
+	while (!pq_.empty() )
 	{
 		current = pq_.top();
 		//cout << "current --> node : " << current.node << " - distance : " << current.distance << endl;
-		std::vector<int> tmp = graph_.OutgoingArcs(current.node);
+		tmp.clear();
+		tmp = graph_.OutgoingArcs(current.node);
 		pq_.pop();
 		for (std::vector<int>::iterator it = tmp.begin(); it != tmp.end(); ++it) {
-			cout << "first : " << graph_.Head(*it) << " second : " << current.node << endl;
+			//cout << "current : " << current.node << " node attegnable : " << graph_.Head(*it) << endl;
 			if (graph_.Head(*it) != current.node && graph_.Head(*it) != prev.node) {
-				cout << "newItem ||| node : " << graph_.Head(*it) << " - distance : " << arc_lengths_[*it] << endl;
-				
+				//cout << "---> newItem - node : " << graph_.Head(*it) << " - distance : " << arc_lengths_[*it] << endl;
+				//cout << "old distance " << distance_[graph_.Head(*it)] << " prev node : " <<  distance_[prev.node] << " - arc_lengths_ : " << arc_lengths_[*it] << endl;
+				if (distance_[graph_.Head(*it)] > distance_[current.node] + arc_lengths_[*it]) {
 					newItem.node = graph_.Head(*it);
-					newItem.distance = arc_lengths_[*it];
+					newItem.distance = distance_[current.node] + arc_lengths_[*it];
 					pq_.push(newItem);
-					distance_[graph_.Head(*it)] += arc_lengths_[*it];
+					distance_[graph_.Head(*it)] = distance_[current.node] + arc_lengths_[*it];
+				}
 				
 			}
 		}
-		printStack();
+		//printStack();
 		//cout << "result " << "[" <<  distance_[0] << ", " <<  distance_[1] << ", "<<  distance_[2] << ", "<<  distance_[3] << ", "<<  distance_[4] << ", "<<  distance_[5] << " ]" << endl;	
-		prev = current;
+		prev.node = current.node;
+		prev.distance = current.distance;
 	}	
 }
 
