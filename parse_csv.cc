@@ -9,6 +9,7 @@
 #include <numeric>
 using namespace std;
 
+#include "graph.h"
 #include "base.h"
 
 double DistanceBetweenLatLngs(pair<double, double> ll1, pair<double, double> ll2) {
@@ -31,10 +32,6 @@ double DistanceBetweenLatLngs(pair<double, double> ll1, pair<double, double> ll2
   return kMeanEarthRadiusMeters * d;
 }
 
-class Graph {
-  public:
-    void AddArc(int i, int j) {}
-};
 
 struct RoadData {
   Graph graph;
@@ -116,6 +113,6 @@ RoadData ParseCsvFile(string filename) {
   return data;
 }
 
-int main(int argc, char** argv) {
-  ParseCsvFile(argv[1]);
-}
+// int main(int argc, char** argv) {
+//   ParseCsvFile(argv[1]);
+// }

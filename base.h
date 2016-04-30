@@ -40,7 +40,7 @@ class FatalLogger : public Logger {
  public:
   FatalLogger(const char* file, int line, const char* message)
       : Logger(file, line) {
-    stream() << "Assertion failed: " << message;
+    stream() << "Assertion failed: " << message << " ";
   }
   ~FatalLogger() {
     stream() << std::endl;
@@ -78,11 +78,9 @@ template<class T>
 string PrintHistogram(const T& v) {
   typedef typename T::value_type Value;
   map<Value, int> count;
-  for (const Value& x : v) 
-    ++count[x];
+  for (const Value& x : v) ++count[x];
   vector<pair<int, Value>> pairs;
-  for (const auto& p : count) 
-    pairs.push_back({p.second, p.first});
+  for (const auto& p : count) pairs.push_back({p.second, p.first});
   std::sort(pairs.begin(), pairs.end());
   std::reverse(pairs.begin(), pairs.end());
   std::ostringstream os;

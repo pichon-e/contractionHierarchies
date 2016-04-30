@@ -12,22 +12,26 @@ CC = g++
 
 RM = rm -f
 
+CFLAGS += -Wextra -Wall -Werror 
 #CFLAGS += -ansi -pedantic
-CXXFLAGS = -std=c++11
+CFLAGS += -I.
+
+LDFLAGS =
 
 NAME = server
 
-SRCS = 	dijkstra.cc \
- 		graph.cc \
- 		dijkstra_test.cc
+SRCS = 	main.cpp \
+ 		graph.cpp \
+ 		parser.cpp \
+ 		route.cpp
 
-OBJS = $(SRCS:.cc=.o)
+OBJS = $(SRCS:.cpp=.o)
 
 
 all: $(NAME)
 
 $(NAME): $(OBJS)
-	$(CC) $(OBJS) -o $(NAME)
+	$(CC) $(OBJS) -o $(NAME) $(LDFLAGS)
 
 clean:
 	$(RM) $(OBJS)

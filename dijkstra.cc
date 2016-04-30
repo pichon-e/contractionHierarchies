@@ -59,10 +59,11 @@ void Dijkstra::Run(int source) {
 			}
 		}
 		//printStack();
-		//cout << "result " << "[" <<  distance_[0] << ", " <<  distance_[1] << ", "<<  distance_[2] << ", "<<  distance_[3] << ", "<<  distance_[4] << ", "<<  distance_[5] << " ]" << endl;	
 		prev.node = current.node;
 		prev.distance = current.distance;
 	}	
+	cout << "result " << "[" <<  distance_[0] << ", " <<  distance_[1] << ", "<<  distance_[2] << ", "<<  distance_[3] << ", "<<  distance_[4] << ", "<<  distance_[5] << "]" << endl;	
+
 }
 
 void Dijkstra::printStack() {
