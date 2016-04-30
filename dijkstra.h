@@ -31,7 +31,7 @@ class Dijkstra {
  private:
   const Graph& graph_;
   const vector<double>& arc_lengths_;
-  vector<double> distance_;
+  vector<pair<double, vector<pair<double, pair<double, double> > > > > distance_;
   vector<int> parent_arc_;
   priority_queue<DijkstraState> pq_;
 };
