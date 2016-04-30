@@ -7,6 +7,10 @@
 #include <set>
 #include <map>
 #include <numeric>
+#include <string>
+#include <iostream>
+#include <regex>
+
 using namespace std;
 
 #include "graph.h"
@@ -32,6 +36,50 @@ double DistanceBetweenLatLngs(pair<double, double> ll1, pair<double, double> ll2
   return kMeanEarthRadiusMeters * d;
 }
 
+struct Road {
+    bool oneway;
+    int speed_kmh;
+    vector<pair<double, double>> latlngs;
+  };
+
+void checkInput(pair<double, double> source, pair<double, double> dest, vector<Road> all) {
+  int i;
+  int same = 0;
+
+  for (vector<Road>::iterator road_it = all.begin(); road_it != all.end(); road_it++) {
+  i = 0;    
+    for (vector<pair<double, double>>::iterator it = road_it->latlngs.begin(); it != road_it->latlngs.end(); it++) {
+      if (it->first == source.first && it->second == source.second) {
+        same++;
+      }
+      i++;
+    }
+  }
+  if (same == 0 ) {
+    cout << "INVALID : Check your lat/lng format and make sure the node exists !" << endl;
+  }
+}
+
+void inputParse(vector<Road> latlngs) {
+  pair<double, double> source;
+  pair<double, double> dest;
+  string cut;
+  string input;
+  
+  getline(cin, input);
+  input = std::regex_replace(input, std::regex("\\->"), ",");
+  istringstream ss(input);
+  std::getline(ss, cut, ',');
+  source.first = stod(cut);
+  std::getline(ss, cut, ',');
+  source.second = stod(cut);
+  std::getline(ss, cut, ',');
+  dest.first = stod(cut);
+  std::getline(ss, cut, ',');
+  dest.second = stod(cut);
+
+  checkInput(source, dest, latlngs);
+}
 
 struct RoadData {
   Graph graph;
@@ -42,11 +90,6 @@ struct RoadData {
 RoadData ParseCsvFile(string filename) {
   ifstream is(filename);
   string line;
-  struct Road {
-    bool oneway;
-    int speed_kmh;
-    vector<pair<double, double>> latlngs;
-  };
   vector<Road> roads;
   while (getline(is, line)) {
     vector<string> fields;
@@ -77,7 +120,6 @@ RoadData ParseCsvFile(string filename) {
   }
   int num_nodes = 0;
   for (auto ll : latlng_nodes) latlng_to_node[ll] = num_nodes++;
-  cout << num_nodes << endl;
 
   Graph graph;
   vector<double> arc_durations;
@@ -103,9 +145,14 @@ RoadData ParseCsvFile(string filename) {
       i = j;
     }
   }
-  cout << arc_durations.size() << endl;
-  cout << std::accumulate(arc_durations.begin(), arc_durations.end(), 0) << endl;
-
+  double total_duration = 0;
+  for (int i = 0; i != arc_durations.size(); i++) {
+    total_duration += arc_durations[i];
+  }
+  printf("%d nodes / %lu arcs / %lf seconds\n", num_nodes, arc_durations.size(), total_duration);
+  
+  inputParse(roads);
+  
   RoadData data;
   data.graph = graph;
   data.latlng_to_node = latlng_to_node;
@@ -113,6 +160,8 @@ RoadData ParseCsvFile(string filename) {
   return data;
 }
 
-// int main(int argc, char** argv) {
-//   ParseCsvFile(argv[1]);
-// }
+int main(int argc, char** argv) {
+    RoadData road;
+
+   road = ParseCsvFile(argv[1]);
+}
