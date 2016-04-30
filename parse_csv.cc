@@ -42,25 +42,20 @@ struct Road {
     vector<pair<double, double>> latlngs;
   };
 
-void checkInput(pair<double, double> source, pair<double, double> dest, vector<Road> all) {
-  int i;
+void checkInput(pair<double, double> source, pair<double, double> dest, map<pair<double, double>, int> all) {
   int same = 0;
 
-  for (vector<Road>::iterator road_it = all.begin(); road_it != all.end(); road_it++) {
-  i = 0;    
-    for (vector<pair<double, double>>::iterator it = road_it->latlngs.begin(); it != road_it->latlngs.end(); it++) {
-      if (it->first == source.first && it->second == source.second) {
+  for (map<pair<double, double>, int>::iterator it = all.begin(); it != all.end(); it++) {
+    if (it->first.first == source.first && it->first.second == source.second) {
         same++;
       }
-      i++;
     }
-  }
   if (same == 0 ) {
     cout << "INVALID : Check your lat/lng format and make sure the node exists !" << endl;
   }
 }
 
-void inputParse(vector<Road> latlngs) {
+void inputParse(map<pair<double, double>, int> latlngs) {
   pair<double, double> source;
   pair<double, double> dest;
   string cut;
@@ -151,7 +146,7 @@ RoadData ParseCsvFile(string filename) {
   }
   printf("%d nodes / %lu arcs / %lf seconds\n", num_nodes, arc_durations.size(), total_duration);
   
-  inputParse(roads);
+  inputParse(latlng_to_node);
   
   RoadData data;
   data.graph = graph;
