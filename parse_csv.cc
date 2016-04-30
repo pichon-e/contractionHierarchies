@@ -15,6 +15,7 @@ using namespace std;
 
 #include "graph.h"
 #include "base.h"
+#include "dijkstra.h"
 
 double DistanceBetweenLatLngs(pair<double, double> ll1, pair<double, double> ll2) {
   double lat1 = ll1.first;
@@ -36,13 +37,19 @@ double DistanceBetweenLatLngs(pair<double, double> ll1, pair<double, double> ll2
   return kMeanEarthRadiusMeters * d;
 }
 
+struct RoadData {
+  Graph graph;
+  vector<double> arc_durations;
+  map<pair<double, double>, int> latlng_to_node;
+};
+
 struct Road {
     bool oneway;
     int speed_kmh;
     vector<pair<double, double>> latlngs;
   };
 
-void checkInput(pair<double, double> source, pair<double, double> dest, map<pair<double, double>, int> all) {
+void checkInput(pair<double, double> source, pair<double, double> dest, map<pair<double, double>, int> all, RoadData data) {
   int same = 0;
 
   for (map<pair<double, double>, int>::iterator it = all.begin(); it != all.end(); it++) {
@@ -53,9 +60,13 @@ void checkInput(pair<double, double> source, pair<double, double> dest, map<pair
   if (same == 0 ) {
     cout << "INVALID : Check your lat/lng format and make sure the node exists !" << endl;
   }
+  else {
+    Dijkstra dij(&(data.graph), &(data.arc_durations));
+    dij.Run(source, dest);
+  }
 }
 
-void inputParse(map<pair<double, double>, int> latlngs) {
+void inputParse(map<pair<double, double>, int> latlngs, RoadData data) {
   pair<double, double> source;
   pair<double, double> dest;
   string cut;
@@ -76,14 +87,8 @@ void inputParse(map<pair<double, double>, int> latlngs) {
   std::getline(ss, cut, ',');
   dest.second = stod(cut);
 
-  checkInput(source, dest, latlngs);
+  checkInput(source, dest, latlngs, data);
 }
-
-struct RoadData {
-  Graph graph;
-  vector<double> arc_durations;
-  map<pair<double, double>, int> latlng_to_node;
-};
 
 RoadData ParseCsvFile(string filename) {
   ifstream is(filename);
@@ -148,18 +153,14 @@ RoadData ParseCsvFile(string filename) {
     total_duration += arc_durations[i];
   }
   printf("%d nodes / %lu arcs / %lf seconds\n", num_nodes, arc_durations.size(), total_duration);
-  
-  inputParse(latlng_to_node);
-  
+    
   RoadData data;
   data.graph = graph;
   data.latlng_to_node = latlng_to_node;
   data.arc_durations = arc_durations;
-  return data;
+  inputParse(latlng_to_node, data);
 }
 
 int main(int argc, char** argv) {
-    RoadData road;
-
-   road = ParseCsvFile(argv[1]);
-}
+  ParseCsvFile(argv[1]);
+ }
