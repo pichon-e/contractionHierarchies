@@ -6,6 +6,7 @@
 #include <cmath>
 #include <set>
 #include <map>
+#include <numeric>
 using namespace std;
 
 #include "base.h"
@@ -118,4 +119,3 @@ RoadData ParseCsvFile(string filename) {
 int main(int argc, char** argv) {
   ParseCsvFile(argv[1]);
 }
-
