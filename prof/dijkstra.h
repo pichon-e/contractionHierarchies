@@ -26,6 +26,7 @@ class Dijkstra {
   vector<int> ArcPathFromSourceTo(int node) const;
 
   void RunRec(int, int);
+  void printStack();
 
  private:
   const Graph& graph_;

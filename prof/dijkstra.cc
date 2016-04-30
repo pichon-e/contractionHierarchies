@@ -1,5 +1,6 @@
 #include <limits>
 #include <iostream>
+#include <queue>
 #include "graph.h"
 #include "dijkstra.h"
 
@@ -13,38 +14,76 @@ Dijkstra::Dijkstra(const Graph* graph, const vector<double>* arc_lengths) : grap
 
 void Dijkstra::Run(int source) {
 	distance_.clear();
-	for (int i = 0; i < graph_.NumNodes(); i++) {
-		distance_.push_back(std::numeric_limits<double>::infinity());
-	}
-		std::vector<int> tmp = graph_.OutgoingArcs(source);
 
-	for (std::vector<int>::iterator it = tmp.begin(); it != tmp.end(); ++it) {
-		// DijkstraState test;
-		// test.node = *it;
-		// test.distance = arc_lengths_[*it];
-		if (distance_[graph_.Head(*it) ] > arc_lengths_[*it]) {
-			distance_[graph_.Head(*it)] = arc_lengths_[*it];
-					cout << "num : " << graph_.Head(*it) << endl;
-			RunRec(graph_.Head(*it), source);
+	for (int i = 0; i < graph_.NumNodes(); i++) {
+		if (i != source)
+			distance_.push_back(std::numeric_limits<double>::infinity());
+		else
+			distance_.push_back(0);
+	}
+
+	DijkstraState current;
+	DijkstraState prev;
+	DijkstraState newItem;
+	DijkstraState SourceItem;
+
+	prev.node = -1;
+
+	SourceItem.node = source;
+	SourceItem.distance = 0;
+	
+	pq_.push(SourceItem);
+
+	while (!pq_.empty())
+	{
+		current = pq_.top();
+		//cout << "current --> node : " << current.node << " - distance : " << current.distance << endl;
+		std::vector<int> tmp = graph_.OutgoingArcs(current.node);
+		pq_.pop();
+		for (std::vector<int>::iterator it = tmp.begin(); it != tmp.end(); ++it) {
+			cout << "first : " << graph_.Head(*it) << " second : " << current.node << endl;
+			if (graph_.Head(*it) != current.node) {
+				cout << "newItem ||| node : " << graph_.Head(*it) << " - distance : " << arc_lengths_[*it] << endl;
+				
+					newItem.node = graph_.Head(*it);
+					newItem.distance = arc_lengths_[*it];
+					pq_.push(newItem);
+					distance_[graph_.Head(*it)] += arc_lengths_[*it];
+				
+			}
 		}
-		// placement en fonction de la distance
-		//pq_.push(test);
+		printStack();
+		//cout << "result " << "[" <<  distance_[0] << ", " <<  distance_[1] << ", "<<  distance_[2] << ", "<<  distance_[3] << ", "<<  distance_[4] << ", "<<  distance_[5] << " ]" << endl;	
+		prev = current;
+	}	
+}
+
+void Dijkstra::printStack() {
+  	
+  	priority_queue<DijkstraState> tmp = pq_;
+
+	while (!tmp.empty())
+	{
+		DijkstraState test = tmp.top();
+		cout << "{" << test.node << ", " << test.distance << "}" << endl;
+		tmp.pop();
 	}
 }
 
 void Dijkstra::RunRec(int source, int prev) {
 	std::vector<int> tmp = graph_.OutgoingArcs(source);
 		for (std::vector<int>::iterator it = tmp.begin(); it != tmp.end(); ++it) {
-		// DijkstraState test;
-		// test.node = *it;
-		// test.distance = arc_lengths_[*it];
+
 		cout << "num --> " << source << " - " << graph_.Head(*it) << endl;
-		if (graph_.Head(*it) != prev && graph_.Head(*it) != source &&  distance_[graph_.Head(*it) ] > arc_lengths_[*it]) {
-			distance_[graph_.Head(*it)] = arc_lengths_[*it];
+		if (graph_.Head(*it) != prev && graph_.Head(*it) != source) {
+			//distance_[graph_.Head(*it)] = arc_lengths_[*it];
+			DijkstraState test;
+			test.node = *it;
+			test.distance = arc_lengths_[*it];
+			pq_.push(test);
 			RunRec(graph_.Head(*it), source);
 		}
-		// placement en fonction de la distance
-		//pq_.push(test);
+		//placement en fonction de la distance
 	}
 }
 
