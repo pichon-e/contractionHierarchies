@@ -34,7 +34,9 @@ void Dijkstra::Run(int source) {
 	
 	pq_.push(SourceItem);
 
-	while (!pq_.empty())
+	int j = 0;
+
+	while (!pq_.empty() && j++ < 5)
 	{
 		current = pq_.top();
 		//cout << "current --> node : " << current.node << " - distance : " << current.distance << endl;
@@ -42,7 +44,7 @@ void Dijkstra::Run(int source) {
 		pq_.pop();
 		for (std::vector<int>::iterator it = tmp.begin(); it != tmp.end(); ++it) {
 			cout << "first : " << graph_.Head(*it) << " second : " << current.node << endl;
-			if (graph_.Head(*it) != current.node) {
+			if (graph_.Head(*it) != current.node && graph_.Head(*it) != prev.node) {
 				cout << "newItem ||| node : " << graph_.Head(*it) << " - distance : " << arc_lengths_[*it] << endl;
 				
 					newItem.node = graph_.Head(*it);
@@ -62,12 +64,16 @@ void Dijkstra::printStack() {
   	
   	priority_queue<DijkstraState> tmp = pq_;
 
+  	cout << "\n---- START ----" << endl;
+
 	while (!tmp.empty())
 	{
 		DijkstraState test = tmp.top();
 		cout << "{" << test.node << ", " << test.distance << "}" << endl;
 		tmp.pop();
 	}
+
+  	cout << "---- END ----\n" << endl;
 }
 
 void Dijkstra::RunRec(int source, int prev) {
