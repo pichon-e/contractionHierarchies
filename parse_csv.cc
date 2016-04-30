@@ -62,7 +62,10 @@ void inputParse(map<pair<double, double>, int> latlngs) {
   string input;
   
   getline(cin, input);
-  input = std::regex_replace(input, std::regex("\\->"), ",");
+
+  size_t index = 0;
+  index = input.find("->", index);
+  input.replace(index, 2, ",");
   istringstream ss(input);
   std::getline(ss, cut, ',');
   source.first = stod(cut);
