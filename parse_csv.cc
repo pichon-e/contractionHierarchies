@@ -51,18 +51,27 @@ struct Road {
 
 void checkInput(pair<double, double> source, pair<double, double> dest, map<pair<double, double>, int> all, RoadData data) {
   int same = 0;
+  int first;
+  int second;
 
   for (map<pair<double, double>, int>::iterator it = all.begin(); it != all.end(); it++) {
     if (it->first.first == source.first && it->first.second == source.second) {
-        same++;
-      }
+      same++;
+      first = it->second;
     }
+  }
+  for (map<pair<double, double>, int>::iterator it = all.begin(); it != all.end(); it++) {
+    if (it->first.first == dest.first && it->first.second == dest.second) {
+      same++;
+      second = it->second;
+    }
+  }
   if (same == 0 ) {
     cout << "INVALID : Check your lat/lng format and make sure the node exists !" << endl;
   }
   else {
     Dijkstra dij(&(data.graph), &(data.arc_durations));
-    dij.Run(source, dest);
+    dij.Run(first, second);
   }
 }
 
