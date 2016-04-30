@@ -66,12 +66,14 @@ void checkInput(pair<double, double> source, pair<double, double> dest, map<pair
       second = it->second;
     }
   }
-  if (same == 0 ) {
-    cout << "INVALID : Check your lat/lng format and make sure the node exists !" << endl;
+  if (same < 2) {
+    cout << "INVALID : Check your lat/lng format and make sure the nodes exists !" << endl;
   }
   else {
     Dijkstra dij(&(data.graph), &(data.arc_durations));
-    dij.Run(first, second);
+    cout << "premier : " << source.first << ";" << source.second << endl;
+    cout << "second : " << dest.first << ";" << dest.second << endl;
+  //  dij.Run(first, second);
   }
 }
 
