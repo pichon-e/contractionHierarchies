@@ -25,7 +25,6 @@ class Dijkstra {
   const vector<int>& ParentArcs() const;    // -1 if not reached.
   vector<int> ArcPathFromSourceTo(int node) const;
 
-  void RunRec(int, int);
   void printStack();
   bool isAlreadyUsed(int index, vector<pair<double, pair<double, double> > > vec);
 

@@ -71,8 +71,8 @@ void checkInput(pair<double, double> source, pair<double, double> dest, map<pair
   }
   else {
     Dijkstra dij(&(data.graph), &(data.arc_durations));
-    cout << "premier : " << source.first << ";" << source.second << endl;
-    cout << "second : " << dest.first << ";" << dest.second << endl;
+    //cout << "premier : " << source.first << ";" << source.second << endl;
+    //cout << "second : " << dest.first << ";" << dest.second << endl;
     dij.Run(first, second);
   }
 }
@@ -171,15 +171,15 @@ RoadData ParseCsvFile(string filename) {
   data.arc_durations = arc_durations;
   inputParse(latlng_to_node, data);
 
-  cout << "out" << endl;
-  for (vector<int>::const_iterator it = graph.OutgoingArcs(2).begin(); it != graph.OutgoingArcs(2).end(); ++it) {
-    cout << graph.Tail(*it) << " - " << graph.Head(*it) << endl;
-  }
+  // cout << "out" << endl;
+  // for (vector<int>::const_iterator it = graph.OutgoingArcs(2).begin(); it != graph.OutgoingArcs(2).end(); ++it) {
+  //   cout << graph.Tail(*it) << " - " << graph.Head(*it) << endl;
+  // }
 
-  cout << "\n in" << endl;
-  for (vector<int>::const_iterator it = graph.IncomingArcs(2).begin(); it != graph.IncomingArcs(2).end(); ++it) {
-    cout << graph.Tail(*it) << " - " << graph.Head(*it) << endl;
-  }
+  // cout << "\n in" << endl;
+  // for (vector<int>::const_iterator it = graph.IncomingArcs(2).begin(); it != graph.IncomingArcs(2).end(); ++it) {
+  //   cout << graph.Tail(*it) << " - " << graph.Head(*it) << endl;
+  // }
   return data;
 }
 
