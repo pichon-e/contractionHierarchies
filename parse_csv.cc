@@ -67,13 +67,13 @@ void checkInput(pair<double, double> source, pair<double, double> dest, map<pair
     }
   }
   if (same < 2) {
-    cout << "INVALID : Check your lat/lng format and make sure the nodes exists !" << endl;
+    cerr << "INVALID : Check your lat/lng format and make sure the nodes exists !" << endl;
   }
   else {
     Dijkstra dij(&(data.graph), &(data.arc_durations));
     //cout << "premier : " << source.first << ";" << source.second << endl;
     //cout << "second : " << dest.first << ";" << dest.second << endl;
-    dij.Run(first, second);
+    dij.Run(first, second, all);
   }
 }
 
@@ -163,7 +163,7 @@ RoadData ParseCsvFile(string filename) {
   for (int i = 0; i != arc_durations.size(); i++) {
     total_duration += arc_durations[i];
   }
-  printf("%d nodes / %lu arcs / %lf seconds\n", num_nodes, arc_durations.size(), total_duration);
+  fprintf(stderr, "%d nodes / %lu arcs / %lf seconds\n", num_nodes, arc_durations.size(), total_duration);
     
   RoadData data;
   data.graph = graph;

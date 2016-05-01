@@ -1,6 +1,7 @@
 #include <limits>
 #include <iostream>
 #include <queue>
+#include <map>
 #include "graph.h"
 #include "dijkstra.h"
 
@@ -12,7 +13,7 @@ Dijkstra::Dijkstra(const Graph* graph, const vector<double>* arc_lengths) : grap
 
 }
 
-void Dijkstra::Run(int source, int dest) {
+void Dijkstra::Run(int source, int dest, map<pair<double, double>, int> all) {
 	distance_.clear();
 
 	for (int i = 0; i < graph_.NumNodes(); i++) {
@@ -22,6 +23,7 @@ void Dijkstra::Run(int source, int dest) {
 		else
 			distance_.push_back(make_pair(0, test));
 	}
+
 
 	DijkstraState current;
 	DijkstraState prev;
@@ -41,33 +43,23 @@ void Dijkstra::Run(int source, int dest) {
 	while (!pq_.empty() )
 	{
 		current = pq_.top();
-		//cout << "current --> node : " << current.node << " - distance : " << current.distance << endl;
 		tmp.clear();
 		tmp = graph_.OutgoingArcs(current.node);
 		pq_.pop();
 		for (std::vector<int>::iterator it = tmp.begin(); it != tmp.end(); ++it) {
-			// remplacer la distance par *it (position de la node) pour savoir si on boucle avec isAlreadyUsed(*it, distance_[graph_.Head(*it)].second)
 			if (graph_.Head(*it) != current.node && graph_.Head(*it) != prev.node && !isAlreadyUsed(*it, distance_[graph_.Head(*it)].second)) {
-			//cout << "current : " << current.node << " node attegnable : " << graph_.Head(*it) << endl;
-				//cout << "---> newItem - node : " << graph_.Head(*it) << " - distance : " << arc_lengths_[*it] << endl;
-				//cout << "old distance " << distance_[graph_.Head(*it)] << " prev node : " <<  distance_[prev.node] << " - arc_lengths_ : " << arc_lengths_[*it] << endl;
-				//cout << "first " << current.node << " - " <<  prev.node << endl;
 				if (distance_[graph_.Head(*it)].first > distance_[current.node].first + arc_lengths_[*it]) {
-				//cout << "second " <<  distance_[graph_.Head(*it)].first << " - " <<  distance_[current.node].first + arc_lengths_[*it] << endl;
-
 					newItem.node = graph_.Head(*it);
 					newItem.distance = distance_[current.node].first + arc_lengths_[*it];
 					pq_.push(newItem);
 					distance_[graph_.Head(*it)].first = distance_[current.node].first + arc_lengths_[*it];
 					if (!distance_[graph_.Head(*it)].second.empty()) {
-						//cout << graph_.Head(*it) << "au moins un élément" << endl;
 						if (distance_[graph_.Head(*it)].second.back().first > arc_lengths_[*it]) {
 							distance_[graph_.Head(*it)].second = distance_[current.node].second;
 							distance_[graph_.Head(*it)].second.push_back(make_pair(arc_lengths_[*it], make_pair(graph_.Tail(*it), graph_.Head(*it))));
 						}
 					}
 					else {
-						//cout << graph_.Head(*it) << "empty" << endl;
 						if (current.node != source)
 							distance_[graph_.Head(*it)].second = distance_[current.node].second;
 						distance_[graph_.Head(*it)].second.push_back(make_pair(arc_lengths_[*it], make_pair(graph_.Tail(*it), graph_.Head(*it))));
@@ -76,23 +68,28 @@ void Dijkstra::Run(int source, int dest) {
 				
 			}
 		}
-		//printStack();
 		prev.node = current.node;
 		prev.distance = current.distance;
 	}
 	int ind = 0;
 	double sec = 0;
 	for (vector<pair<double, pair<double, double> > >::iterator it2 = distance_[dest].second.begin(); it2 != distance_[dest].second.end(); ++it2) {
-		//cout << "node : " << it2->second.first << " -> " << it2->second.second << " en : " << it2->first << "sec." << endl;
 		sec += it2->first;
 	}
-	cout << sec << " secondes" << endl;
-	cerr << "\n----- chemin pour aller à " << ind++ << "-----" << endl;
+	map<int, pair<double, double>> reversed;
+
+	for (map<pair<double, double>, int>::iterator it = all.begin(); it != all.end(); ++it)
+    	reversed[it->second] = it->first;
+    j = 0;
+
+	cout << sec << " seconds" << endl;
+	cerr << "----- PATH from " << source << " to " << dest << " -----" << endl;
 
 	for (vector<pair<double, pair<double, double> > >::iterator it2 = distance_[dest].second.begin(); it2 != distance_[dest].second.end(); ++it2) {
-		cerr << "node : " << it2->second.first << " -> " << it2->second.second << " en : " << it2->first << "sec." << endl;
-		sec += it2->first;
+		cerr << "node : " << it2->second.first << " (" << reversed.find(it2->second.first)->second.first << ";" << reversed.find(it2->second.first)->second.second << ") -> " << it2->second.second << " (" << reversed.find(it2->second.second)->second.first << ";" << reversed.find(it2->second.second)->second.second << ") in : " << it2->first << "sec." << endl;
+		j++;
 	}
+	cerr << "Path total time " << sec << " seconds" << endl;
 }
 
 bool Dijkstra::isAlreadyUsed(int index, vector<pair<double, pair<double, double> > > vec) {
@@ -103,23 +100,6 @@ bool Dijkstra::isAlreadyUsed(int index, vector<pair<double, pair<double, double>
 	return false;
 }
 
-void Dijkstra::printStack() {
-  	
-  	priority_queue<DijkstraState> tmp = pq_;
-
-  	cout << "\n---- START ----" << endl;
-
-	while (!tmp.empty())
-	{
-		DijkstraState test = tmp.top();
-		cout << "{" << test.node << ", " << test.distance << "}" << endl;
-		tmp.pop();
-	}
-
-  	cout << "---- END ----\n" << endl;
-}
-
-  // "Read" API, after a dijkstra run has completed.
 const vector<double>& Dijkstra::Distances() const {
 
 	vector<double> *tmp = new vector<double>();
@@ -131,10 +111,4 @@ const vector<double>& Dijkstra::Distances() const {
 	cout << "result " << "[" <<  (*tmp)[0] << ", " <<  (*tmp)[1] << ", "<<  (*tmp)[2] << ", "<<  (*tmp)[3] << ", "<<  (*tmp)[4] << ", "<<  (*tmp)[5] << "]" << endl;	
 
  	return *tmp;
-}  // Infinity if not reached.
-
-// const vector<int>& Dijkstra::ParentArcs() const {
-
-// }    // -1 if not reached.
-
-// vector<int> Dijkstra::ArcPathFromSourceTo(int node) const {}
+} 
