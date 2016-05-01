@@ -12,7 +12,7 @@ Dijkstra::Dijkstra(const Graph* graph, const vector<double>* arc_lengths) : grap
 
 }
 
-void Dijkstra::Run(int source) {
+void Dijkstra::Run(int source, int dest) {
 	distance_.clear();
 
 	for (int i = 0; i < graph_.NumNodes(); i++) {
@@ -47,7 +47,8 @@ void Dijkstra::Run(int source) {
 		pq_.pop();
 		for (std::vector<int>::iterator it = tmp.begin(); it != tmp.end(); ++it) {
 			cout << "current : " << current.node << " node attegnable : " << graph_.Head(*it) << endl;
-			if (graph_.Head(*it) != current.node && graph_.Head(*it) != prev.node) {
+			// remplacer la distance par *it (position de la node) pour savoir si on boucle avec isAlreadyUsed(*it, distance_[graph_.Head(*it)].second)
+			if (graph_.Head(*it) != current.node && graph_.Head(*it) != prev.node && !isAlreadyUsed(*it, distance_[graph_.Head(*it)].second)) {
 				cout << "ok" << endl;
 				//cout << "---> newItem - node : " << graph_.Head(*it) << " - distance : " << arc_lengths_[*it] << endl;
 				//cout << "old distance " << distance_[graph_.Head(*it)] << " prev node : " <<  distance_[prev.node] << " - arc_lengths_ : " << arc_lengths_[*it] << endl;
@@ -90,6 +91,14 @@ void Dijkstra::Run(int source) {
 		}
 		cout << "le tout en " << sec << " secondes" << endl;
 	}
+}
+
+bool Dijkstra::isAlreadyUsed(int index, vector<pair<double, pair<double, double> > > vec) {
+	for (vector<pair<double, pair<double, double> > >::iterator it = vec.begin(); it != vec.end(); ++it){
+		if (it->first == index)
+			return true;
+	}
+	return false;
 }
 
 void Dijkstra::printStack() {

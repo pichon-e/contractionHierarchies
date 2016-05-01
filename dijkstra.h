@@ -18,7 +18,7 @@ class Dijkstra {
   // "graph" and "arc_lengths" aren't copied.
   Dijkstra(const Graph* graph, const vector<double>* arc_lengths); 
 
-  void Run(int source);
+  void Run(int source, int dest);
 
   // "Read" API, after a dijkstra run has completed.
   const vector<double>& Distances() const;  // Infinity if not reached.
@@ -27,6 +27,7 @@ class Dijkstra {
 
   void RunRec(int, int);
   void printStack();
+  bool isAlreadyUsed(int index, vector<pair<double, pair<double, double> > > vec);
 
  private:
   const Graph& graph_;
